@@ -14,8 +14,6 @@ class Kineograph
 
   spriteSheet: null
   
-  offset: 0
-  
   currentAnimationFrame: 0
 
   _advanceCount: 0
@@ -185,14 +183,14 @@ class Kineograph
 
   _tick: =>
     f = if @_animation then @_animation.frequency else 1
-    @advance() if !@paused and ((++@_advanceCount)+@offset)%f == 0
+    @advance() if !@paused and (++@_advanceCount)%f == 0
     @draw()
 
   _handleImageLoad: =>
     if --@_loadCount == 0
       @_calculateFrames()
       @complete = true
-      @onLoadComplete(@) if @onLoadComplete
+      @onLoadComplete() if @onLoadComplete
 
   _calculateFrames: =>
     return if @_frames || @_frameWidth == 0
@@ -231,13 +229,13 @@ class Kineograph
           @paused = true
           @currentAnimationFrame = a.frames.length - 1
           @currentFrame = a.frames[@currentAnimationFrame]
-        @onAnimationEnd(@, a.name) if @onAnimationEnd
+        @onAnimationEnd(a.name) if @onAnimationEnd
       else
         @currentFrame = a.frames[@currentAnimationFrame]
     else
       if @currentFrame >= @getNumFrames()
         @currentFrame = 0
-        @onAnimationEnd(@, null) if @onAnimationEnd
+        @onAnimationEnd(null) if @onAnimationEnd
 
   _goto: (frameOrAnimation) =>
     if isNaN(frameOrAnimation)

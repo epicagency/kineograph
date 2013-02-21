@@ -1,7 +1,7 @@
 // Kineograph, a JavaScript plugin that displays frames or sequences of frames from a sprite sheet image.
 // by Fabrice Lejeune for EPIC Agency, http://epic.net
 // 
-// Version 0.1.0
+// Version 0.1.1
 // Full source at https://github.com/epicagency/kineograph
 // Copyright (c) 2012 EPIC Agency http://epic.net
 
@@ -26,8 +26,6 @@
     Kineograph.prototype.paused = true;
 
     Kineograph.prototype.spriteSheet = null;
-
-    Kineograph.prototype.offset = 0;
 
     Kineograph.prototype.currentAnimationFrame = 0;
 
@@ -271,7 +269,7 @@
     Kineograph.prototype._tick = function() {
       var f;
       f = this._animation ? this._animation.frequency : 1;
-      if (!this.paused && ((++this._advanceCount) + this.offset) % f === 0) {
+      if (!this.paused && (++this._advanceCount) % f === 0) {
         this.advance();
       }
       return this.draw();
@@ -282,7 +280,7 @@
         this._calculateFrames();
         this.complete = true;
         if (this.onLoadComplete) {
-          return this.onLoadComplete(this);
+          return this.onLoadComplete();
         }
       }
     };
@@ -333,7 +331,7 @@
             this.currentFrame = a.frames[this.currentAnimationFrame];
           }
           if (this.onAnimationEnd) {
-            return this.onAnimationEnd(this, a.name);
+            return this.onAnimationEnd(a.name);
           }
         } else {
           return this.currentFrame = a.frames[this.currentAnimationFrame];
@@ -342,7 +340,7 @@
         if (this.currentFrame >= this.getNumFrames()) {
           this.currentFrame = 0;
           if (this.onAnimationEnd) {
-            return this.onAnimationEnd(this, null);
+            return this.onAnimationEnd(null);
           }
         }
       }
