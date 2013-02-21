@@ -133,17 +133,6 @@ class Kineograph
     # launch ticker
     @tick = setInterval(@_tick, 1000/@_fps)
 
-  draw: =>
-    frame = @getFrame(@currentFrame)
-    return unless frame
-    rect = frame.rect
-    @kineograph.src = "#{frame.image.src}" unless @kineograph.src is frame.image.src
-    @kineograph.style.width = "#{frame.image.width}px" unless @kineograph.style.width is frame.image.width
-    @kineograph.style.height = "#{frame.image.height}px" unless @kineograph.style.height is frame.image.height
-    @kineograph.style.left = "-#{rect.x}px"
-    @kineograph.style.top = "-#{rect.y}px"
-    true
-
   play: =>
     @paused = false
   
@@ -157,10 +146,6 @@ class Kineograph
   gotoAndStop: (frameOrAnimation) =>
     @paused = true;
     @_goto(frameOrAnimation)
-
-  advance: =>
-    if @_animation then @currentAnimationFrame++ else @currentFrame++
-    @_normalizeFrame()
 
   getNumFrames: (animation) =>
     unless animation
@@ -183,8 +168,23 @@ class Kineograph
 
   _tick: =>
     f = if @_animation then @_animation.frequency else 1
-    @advance() if !@paused and (++@_advanceCount)%f == 0
-    @draw()
+    @_advance() if !@paused and (++@_advanceCount)%f == 0
+    @_draw()
+
+  _advance: =>
+    if @_animation then @currentAnimationFrame++ else @currentFrame++
+    @_normalizeFrame()
+
+  _draw: =>
+    frame = @getFrame(@currentFrame)
+    return unless frame
+    rect = frame.rect
+    @kineograph.src = "#{frame.image.src}" unless @kineograph.src is frame.image.src
+    @kineograph.style.width = "#{frame.image.width}px" unless @kineograph.style.width is frame.image.width
+    @kineograph.style.height = "#{frame.image.height}px" unless @kineograph.style.height is frame.image.height
+    @kineograph.style.left = "-#{rect.x}px"
+    @kineograph.style.top = "-#{rect.y}px"
+    true
 
   _handleImageLoad: =>
     if --@_loadCount == 0

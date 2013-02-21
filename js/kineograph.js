@@ -1,7 +1,7 @@
 // Kineograph, a JavaScript plugin that displays frames or sequences of frames from a sprite sheet image.
 // by Fabrice Lejeune for EPIC Agency, http://epic.net
 // 
-// Version 0.1.1
+// Version 0.1.2
 // Full source at https://github.com/epicagency/kineograph
 // Copyright (c) 2012 EPIC Agency http://epic.net
 
@@ -64,6 +64,10 @@
 
       this._handleImageLoad = __bind(this._handleImageLoad, this);
 
+      this._draw = __bind(this._draw, this);
+
+      this._advance = __bind(this._advance, this);
+
       this._tick = __bind(this._tick, this);
 
       this.getFrame = __bind(this.getFrame, this);
@@ -74,8 +78,6 @@
 
       this.getNumFrames = __bind(this.getNumFrames, this);
 
-      this.advance = __bind(this.advance, this);
-
       this.gotoAndStop = __bind(this.gotoAndStop, this);
 
       this.gotoAndPlay = __bind(this.gotoAndPlay, this);
@@ -83,8 +85,6 @@
       this.stop = __bind(this.stop, this);
 
       this.play = __bind(this.play, this);
-
-      this.draw = __bind(this.draw, this);
 
       var anim, frame, frames, i, image, name, obj, src, _i, _j, _k, _len, _len1, _ref, _ref1, _ref2, _ref3, _ref4;
       if (!data) {
@@ -190,27 +190,6 @@
       this.tick = setInterval(this._tick, 1000 / this._fps);
     }
 
-    Kineograph.prototype.draw = function() {
-      var frame, rect;
-      frame = this.getFrame(this.currentFrame);
-      if (!frame) {
-        return;
-      }
-      rect = frame.rect;
-      if (this.kineograph.src !== frame.image.src) {
-        this.kineograph.src = "" + frame.image.src;
-      }
-      if (this.kineograph.style.width !== frame.image.width) {
-        this.kineograph.style.width = "" + frame.image.width + "px";
-      }
-      if (this.kineograph.style.height !== frame.image.height) {
-        this.kineograph.style.height = "" + frame.image.height + "px";
-      }
-      this.kineograph.style.left = "-" + rect.x + "px";
-      this.kineograph.style.top = "-" + rect.y + "px";
-      return true;
-    };
-
     Kineograph.prototype.play = function() {
       return this.paused = false;
     };
@@ -227,15 +206,6 @@
     Kineograph.prototype.gotoAndStop = function(frameOrAnimation) {
       this.paused = true;
       return this._goto(frameOrAnimation);
-    };
-
-    Kineograph.prototype.advance = function() {
-      if (this._animation) {
-        this.currentAnimationFrame++;
-      } else {
-        this.currentFrame++;
-      }
-      return this._normalizeFrame();
     };
 
     Kineograph.prototype.getNumFrames = function(animation) {
@@ -270,9 +240,39 @@
       var f;
       f = this._animation ? this._animation.frequency : 1;
       if (!this.paused && (++this._advanceCount) % f === 0) {
-        this.advance();
+        this._advance();
       }
-      return this.draw();
+      return this._draw();
+    };
+
+    Kineograph.prototype._advance = function() {
+      if (this._animation) {
+        this.currentAnimationFrame++;
+      } else {
+        this.currentFrame++;
+      }
+      return this._normalizeFrame();
+    };
+
+    Kineograph.prototype._draw = function() {
+      var frame, rect;
+      frame = this.getFrame(this.currentFrame);
+      if (!frame) {
+        return;
+      }
+      rect = frame.rect;
+      if (this.kineograph.src !== frame.image.src) {
+        this.kineograph.src = "" + frame.image.src;
+      }
+      if (this.kineograph.style.width !== frame.image.width) {
+        this.kineograph.style.width = "" + frame.image.width + "px";
+      }
+      if (this.kineograph.style.height !== frame.image.height) {
+        this.kineograph.style.height = "" + frame.image.height + "px";
+      }
+      this.kineograph.style.left = "-" + rect.x + "px";
+      this.kineograph.style.top = "-" + rect.y + "px";
+      return true;
     };
 
     Kineograph.prototype._handleImageLoad = function() {
