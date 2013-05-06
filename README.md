@@ -24,7 +24,7 @@ This will install `coffee-script` and `uglifyjs`.
 
 Once you're configured, building the JavasScript from the command line is easy:
 
-    cake build                # build Chosen from source
-    cake watch                # watch coffee/ for changes and build Chosen
+    cake build                # build Kineograph from source
+    cake watch                # watch coffee/ for changes and build Kineograph
     
 If you're interested, you can find the recipes in Cakefile.
