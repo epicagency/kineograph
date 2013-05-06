@@ -1,7 +1,7 @@
 // Kineograph, a JavaScript plugin that displays frames or sequences of frames from a sprite sheet image.
 // by Fabrice Lejeune for EPIC Agency, http://epic.net
 // 
-// Version 0.1.2
+// Version 0.1.3
 // Full source at https://github.com/epicagency/kineograph
 // Copyright (c) 2012 EPIC Agency http://epic.net
 
