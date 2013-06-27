@@ -2,7 +2,7 @@
   "name": "kineograph",
   "description": "Kineograph is a JavaScript plugin that displays frames or sequences of frames (ie. animations) from a sprite sheet image. A sprite sheet is a series of images (usually animation frames) combined into a single image.",
   "author": "EPIC Agency",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "engines": {
     "node": ">=0.4.0"
   },
